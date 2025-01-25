@@ -1,0 +1,22 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<pic18f57q43.h>
+#include<xc.h>
+
+#define _XTAL_FREQ 4000000UL
+
+void configuro();
+
+void main()
+{
+    configuro();
+    while(1)
+    {
+        
+    }
+}
+
+void configuro()
+{
+    
+}
