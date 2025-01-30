@@ -28,12 +28,11 @@ configuro:
 			;entradas no se definen con LAT
 
 wile1:
-    btfss   PORTB,4
+    btfsc   PORTB,4 ;espera activa a que B4 presionado
     goto    wile1
 wile2: 
-    btfsc   PORTB,4
+    btfss   PORTB,4 ;espera activa a que B4 soltado
     goto    wile2
-    btg	    LATF,3
-    goto wile1
+    btg	    LATF,3  ;cambio de estado del led
+    goto wile1	    ;regreso al inicio
     end
-
