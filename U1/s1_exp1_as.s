@@ -23,9 +23,9 @@ configuro:
     movlw   40H
     movwf   OSCEN, b
     movlb   04H		; banco 4
-    bcf	    TRISF, 3, b	; RF3 salida y b --> Banked BSR
-    bcf	    ANSELF, 3, b; RF3 digital y b --> Banked BSR
-    bsf	    LATF, 3, b	; b --> Banked BSR
+    bcf	    TRISF, 3, b	; RF3 salida y 			b --> Banked BSR
+    bcf	    ANSELF, 3, b; RF3 digital y 		b --> Banked BSR
+    bsf	    LATF, 3, b	; RF3 inicia en 1 lógico	b --> Banked BSR
 
 inicio:
     call    retardo
