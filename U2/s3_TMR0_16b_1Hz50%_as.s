@@ -1,8 +1,3 @@
-/*
-    Algoritmo que permite generar una onda cuadrada de frecuencia de 1Hz
-    con un DC de 50% a travez del puerto RD5, con un oscilador de 4MHz
-    y el timer0 configurado a 16bits
-*/
     PROCESSOR 18F57Q43
     #include <xc.inc>
     #include <pic18f57q43.inc>
@@ -15,7 +10,7 @@
     ORG    000000H
     goto    configuro
 
-    ORG    000100H
+    ORG    000020H
     
 configuro:
     ; oscilador
@@ -28,10 +23,10 @@ configuro:
     movwf    OSCEN, b	    ;Habilita el HFINTOSC
     ; GPIOS
     movlb    04H	    ;banco 4(GPIOS)
-    ; RB4
-    bsf	    TRISB, 4, b	    ;RB4 input
-    bcf	    ANSELB, 4, b    ;RB4 digital
-    bsf	    WPUB, 4, b	    ;RB4 pull-up activado
+    ; RD5
+    bcf	    TRISD, 5, b	    ;salida
+    bcf	    ANSELD, 5, b    ;digital
+    bcf	    LATD, 5, b	    ;apagado
     ; timer
     movlb   03H		    ;banco 3(T0CON0 T0CON1 TMR0H TMR0L)
     movlw   90H
@@ -44,7 +39,7 @@ cargar:
     movlw   0x0BH
     movwf   TMR0H, b	    ;cargamos 0B al byte más significativo (H)
     movlw   0xDCH	    
-    movwf   TMR0L	    ;cargamos DB al byte menos significativo (L)
+    movwf   TMR0L, b	    ;cargamos DB al byte menos significativo (L)
     movlb   04H		    ;regresamos al banco 4
     
 inicio:
@@ -53,5 +48,5 @@ inicio:
     bcf	    PIR3, 7, b	    ;bajo la bandera (necesario)
     btg	    LATD, 5, b	    ;alterno RD5
     goto    cargar
-    
+
     end
