@@ -32,14 +32,19 @@ configuro:
     movwf    OSCCON1, b	    ;HFINTOSC y NDIV 1
     movlw    02H    
     movwf    OSCFRQ, b	    ;4MHz
-    movlw    40H    
-    bcf	    TRISD, 0, b	    ;output
-    bcf	    ANSELD, 0, b    ;digital
-    bsf	    LATD, 0, b	    ;activado
+    movlb    04H    
+    ; RA0
+    bcf	    TRISA, 0, b	    ;output
+    bcf	    ANSELA, 0, b    ;digital
+    bcf	    LATA, 0, b	    ;apagado
     ; RB0
     bsf	    TRISB, 0, b	    ;input
     bcf	    ANSELB, 0, b    ;digital
     bsf	    WPUB, 0, b	    ;pull-up
+    ; RD0
+    bcf	    TRISD, 0, b	    ;output
+    bcf	    ANSELD, 0, b    ;digital
+    bcf	    LATD, 0, b	    ;apagado
     ; interrupciones
     bsf	    INTCON0, 5, b   ;se activa los niveles de prioridad
     bsf	    INTCON0, 7, b   ;GIEH: interrupciones de alta prioriad activadas
@@ -48,6 +53,12 @@ configuro:
     movlb   03H		    ;banco 3(IPRx)
     bsf	    IPR1, 0, b	    ;se asigna prioridad a la interrupción del grupo 1 bit0 (INT0)
     movlb   04H		    ;regreso al banco 4
+    
+    ;porsiacaso restaurar la entrada INT0 a RB0
+    movlb   02H
+    movlw   08H
+    movwf   INT0PPS,B
+    movlb   04H
     
 inicio:
     bsf	    LATA, 0, b	    ;enciendo RA0
@@ -88,3 +99,4 @@ zzz:
     return
     
     end
+
