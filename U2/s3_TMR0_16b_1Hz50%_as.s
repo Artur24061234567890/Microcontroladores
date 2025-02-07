@@ -43,7 +43,7 @@ cargar:
     movlb   04H		    ;regresamos al banco 4
     
 inicio:
-    btfsc   PIR3, 7, b	    ;pausa activa hasta que PIR3 bit 7(TMR0IF) sea 1 (bandera)
+    btfss   PIR3, 7, b	    ;pausa activa hasta que PIR3 bit 7(TMR0IF) sea 1 (bandera)
     goto    inicio
     bcf	    PIR3, 7, b	    ;bajo la bandera (necesario)
     btg	    LATD, 5, b	    ;alterno RD5
