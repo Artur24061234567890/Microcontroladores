@@ -1,4 +1,7 @@
-//Módulo ADC con LCD y con interrupciones
+/* 
+Módulo ADC con LCD y con interrupciones
+Circuitería: dos resistencias variables en RA1 y RA2, un led en RA0, y el pulsador INT0 en RB0(pull up interno)
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
