@@ -12,9 +12,9 @@
 #include "cabecera.h"
 #include "LCD.h"
 
-#define _XTAL_FREQ 4000000UL    //Fosc a 4MHz
+#define _XTAL_FREQ 4000000UL    // Fosc a 4MHz
 
-void configuro();      // Configuración de los periféricos
+void configuro();      
 void LCD_init();
 void captura_ADC();
 int convierte(int valorADC, int minADC, int maxADC, int minVal, int maxVal);
@@ -72,11 +72,11 @@ void captura_ADC() {
     while(ADCON0bits.GO);
     temp = convierte(ADRESH, 0, 255, 10, 42);
     
-    // Leer Oxígeno Disuelto
+    // Leer Oxígeno Disuelto (multiplicado por 10 para manejar el decimal)
     ADPCH = 0x01; 
     ADCON0bits.GO = 1;
     while(ADCON0bits.GO);
-    oxigeno = convierte(ADRESH, 0, 255, 5, 9);
+    oxigeno = convierte(ADRESH, 0, 255, 5, 95); // 0.5 a 9.5 -> 05 a 95
     
     // Leer Salinidad
     ADPCH = 0x02; 
@@ -84,11 +84,11 @@ void captura_ADC() {
     while(ADCON0bits.GO);
     salinidad = convierte(ADRESH, 0, 255, 5, 56);
     
-    // Leer PH
+    // Leer PH (multiplicado por 10 para manejar el decimal)
     ADPCH = 0x03; 
     ADCON0bits.GO = 1;
     while(ADCON0bits.GO);
-    ph = convierte(ADRESH, 0, 255, 3, 9);
+    ph = convierte(ADRESH, 0, 255, 35, 97); // 3.5 a 9.7 -> 35 a 97
 }
 
 int convierte(int valorADC, int minADC, int maxADC, int minVal, int maxVal) {
@@ -99,11 +99,11 @@ void evaluarParametros() {
     POS_CURSOR(2,0);
     if (temp < 23 || temp > 31) {
         ESCRIBE_MENSAJE("Alerta temp     ", 16);
-    } else if (oxigeno < 5 || oxigeno > 7) {
+    } else if (oxigeno < 50 || oxigeno > 70) { // Comparación ajustada a escala x10
         ESCRIBE_MENSAJE("Alerta oxigeno  ", 18);
     } else if (salinidad < 15 || salinidad > 25) {
         ESCRIBE_MENSAJE("Alerta salinidad", 18);
-    } else if (ph < 6 || ph > 8) {
+    } else if (ph < 65 || ph > 85) { // Comparación ajustada a escala x10
         ESCRIBE_MENSAJE("Alerta pH       ", 18);
     } else {
         ESCRIBE_MENSAJE("Parametros OK   ", 18);
