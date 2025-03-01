@@ -12,7 +12,7 @@
 #include "cabecera.h"
 #include "LCD.h"
 
-#define _XTAL_FREQ 4000000UL    // Fosc a 4MHz
+#define _XTAL_FREQ 32000000UL    // Fosc a 32MHz
 
 void configuro();      
 void LCD_init();
@@ -41,7 +41,7 @@ void main(void) {
 
 void configuro() {
     OSCCON1 = 0x60;
-    OSCFRQ  = 0x02;
+    OSCFRQ  = 0x06; //32MHz
     OSCEN   = 0x40;
     
     TRISA = 0x0F;  // RA0, RA1, RA2, RA3 como entrada
