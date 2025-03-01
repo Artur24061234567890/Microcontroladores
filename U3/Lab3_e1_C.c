@@ -17,7 +17,7 @@
 void configuro();      // Configuración de los periféricos
 void LCD_init();
 void captura_ADC();
-int convierte(float voltaje, float minV, float maxV, float minVal, float maxVal);
+int convierte(int valorADC, int minADC, int maxADC, int minVal, int maxVal);
 void evaluarParametros();
 
 int temp, oxigeno, salinidad, ph;
@@ -31,7 +31,7 @@ void main(void) {
         captura_ADC();
         
         POS_CURSOR(1,0);
-        sprintf(mensaje, "T:%d O:%d S:%d P:%d", temp, oxigeno, salinidad, ph);
+        sprintf(mensaje, "T:%02dO:%02dS:%02dP:%02d", temp, oxigeno, salinidad, ph);
         ESCRIBE_MENSAJE(mensaje, 16);
         
         evaluarParametros();
@@ -70,29 +70,29 @@ void captura_ADC() {
     ADPCH = 0x00; 
     ADCON0bits.GO = 1;
     while(ADCON0bits.GO);
-    temp = convierte(ADRESH, 0.5, 4.7, 10, 42);
+    temp = convierte(ADRESH, 0, 255, 10, 42);
     
     // Leer Oxígeno Disuelto
     ADPCH = 0x01; 
     ADCON0bits.GO = 1;
     while(ADCON0bits.GO);
-    oxigeno = convierte(ADRESH, 0.5, 4.7, 0.5, 9.5);
+    oxigeno = convierte(ADRESH, 0, 255, 5, 9);
     
     // Leer Salinidad
     ADPCH = 0x02; 
     ADCON0bits.GO = 1;
     while(ADCON0bits.GO);
-    salinidad = convierte(ADRESH, 0.5, 4.7, 5, 56);
+    salinidad = convierte(ADRESH, 0, 255, 5, 56);
     
     // Leer PH
     ADPCH = 0x03; 
     ADCON0bits.GO = 1;
     while(ADCON0bits.GO);
-    ph = convierte(ADRESH, 0.5, 4.7, 3.5, 9.7);
+    ph = convierte(ADRESH, 0, 255, 3, 9);
 }
 
-int convierte(float voltaje, float minV, float maxV, float minVal, float maxVal) {
-    return (int)((voltaje - minV) * (maxVal - minVal) / (maxV - minV) + minVal);
+int convierte(int valorADC, int minADC, int maxADC, int minVal, int maxVal) {
+    return (valorADC - minADC) * (maxVal - minVal) / (maxADC - minADC) + minVal;
 }
 
 void evaluarParametros() {
@@ -103,9 +103,9 @@ void evaluarParametros() {
         ESCRIBE_MENSAJE("Alerta oxigeno  ", 18);
     } else if (salinidad < 15 || salinidad > 25) {
         ESCRIBE_MENSAJE("Alerta salinidad", 18);
-    } else if (ph < 6.5 || ph > 8.5) {
+    } else if (ph < 6 || ph > 8) {
         ESCRIBE_MENSAJE("Alerta pH       ", 18);
     } else {
-        ESCRIBE_MENSAJE("Parametros OK     ", 18);
+        ESCRIBE_MENSAJE("Parametros OK   ", 18);
     }
 }
